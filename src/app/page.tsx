@@ -10,13 +10,25 @@ type CrawlItem = {
     content: string;
 };
 
+type CrawlResponse = {
+    markdown?: string;
+    metadata?: {
+        url?: string;
+        sourceURL?: string;
+        // Add other metadata fields if needed
+    };
+};
+
+
 export default function HomePage() {
   const [crawls, setCrawls] = useState<CrawlItem[]>([]);
   const [selected, setSelected] = useState<CrawlItem | null>(null);
 
-  const handleCrawl = (data: any) => {
-    const url = data.metadata?.url || data.metadata?.sourceURL || "";
-    const content = data.markdown || "";
+  const handleCrawl = (data: unknown) => {
+    const crawlData = data as CrawlResponse;
+    const url = crawlData.metadata?.url || crawlData.metadata?.sourceURL || "";
+    const content = crawlData.markdown || "";
+    if (!url) return;
     const newItem: CrawlItem = { url, content };
     setCrawls(prev => [newItem, ...prev]);
     setSelected(newItem);
