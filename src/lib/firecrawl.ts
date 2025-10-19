@@ -1,10 +1,21 @@
-export async function crawlUrl(url: string) {
-  const res = await fetch('/api/crawl', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url }),
-  });
+import Firecrawl from '@mendable/firecrawl-js';
 
-  if (!res.ok) throw new Error('Failed to crawl URL');
-  return res.json();
+export class FirecrawlService {
+  private firecrawl: Firecrawl;
+  private API_KEY = process.env.NEXT_PUBLIC_FIRECRAWL_API_KEY;
+
+  constructor() {
+    this.firecrawl = new Firecrawl({
+      apiKey: this.API_KEY,
+    });
+  }
+
+  async crawlUrl(url: string) {
+    try {
+      return await this.firecrawl.scrapeUrl(url, { formats: ['markdown'] });
+    } catch (e) {
+      console.error('Error during crawl:', e);
+      return e;
+    }
+  }
 }

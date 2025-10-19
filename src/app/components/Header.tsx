@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { crawlUrl } from "@/lib/firecrawl";
+import {FirecrawlService} from "@/lib/firecrawl";
 
 export default function Header({ onCrawl }: { onCrawl: (data: unknown) => void }) {
   const [url, setUrl] = useState("");
@@ -23,9 +23,11 @@ export default function Header({ onCrawl }: { onCrawl: (data: unknown) => void }
     }
     setLoading(true);
     try {
-      const data = await crawlUrl(url);
+      const crawl = new FirecrawlService();
+      const data = await crawl.crawlUrl(url);
       onCrawl(data);
-    } catch {
+    } catch (err) {
+      console.error("Crawl error:", err);
       setError("Failed to crawl. Try again.");
     } finally {
       setLoading(false);

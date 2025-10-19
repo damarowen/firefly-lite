@@ -15,7 +15,9 @@ export default function HomePage() {
   const [selected, setSelected] = useState<CrawlItem | null>(null);
 
   const handleCrawl = (data: any) => {
-    const newItem: CrawlItem = { url: data.url, content: data.markdown || data.html || "" };
+    const url = data.metadata?.url || data.metadata?.sourceURL || "";
+    const content = data.markdown || "";
+    const newItem: CrawlItem = { url, content };
     setCrawls(prev => [newItem, ...prev]);
     setSelected(newItem);
   };

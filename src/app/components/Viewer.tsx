@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 export default function Viewer({ content }: { content: string }) {
   const [copied, setCopied] = useState(false);
@@ -25,7 +26,19 @@ export default function Viewer({ content }: { content: string }) {
       </div>
       <div className="flex-1 overflow-y-auto p-6">
         {content ? (
-          <pre className="whitespace-pre-wrap text-gray-200 break-words">{content}</pre>
+          <>
+            <section>
+              <h4 className="text-md font-bold text-gray-100 mb-2">Styled Markdown</h4>
+              <div className="prose prose-invert">
+                <ReactMarkdown>{content}</ReactMarkdown>
+              </div>
+            </section>
+            <hr className="my-6 border-gray-700" />
+            <section>
+              <h4 className="text-md font-bold text-gray-100 mb-2">Plain Markdown</h4>
+              <pre className="whitespace-pre-wrap text-gray-200 break-words bg-gray-800 p-4 rounded">{content}</pre>
+            </section>
+          </>
         ) : (
           <p className="text-gray-500">No content to display.</p>
         )}
